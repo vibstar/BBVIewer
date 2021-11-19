@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Pressable, FlatList } from 'react-native';
+import React, { useState, onPress } from 'react';
+import { StyleSheet, Text, View, Pressable, FlatList, TouchableOpacity, } from 'react-native';
 import axios from 'axios';
 
 export default function App() {
@@ -20,19 +20,20 @@ export default function App() {
 
   const getBBoards = async () => {
     axios.get(appURL + "/bboardNames").then((response) => {
-      setBBoards(response.data.map((board) => ({name : board})));
+      setBBoards(response.data.map((board) => ({ name: board })));
     });
     console.log(bboards)
   }
-  const Item = ({ name }) => (
-    <View style={styles.BBScroller}>
-      <Text style={styles.BBScrollerText}>{name}</Text>
-    </View>
-  );
 
-  const renderItem = ({ item }) => (
-    <Item bboards={item.name} />
-  );
+  // const Item = ({ name }) => (
+  //   <View style={styles.BBScroller}>
+  //     <Text style={styles.BBScrollerText}>{name}</Text>
+  //   </View>
+  // );
+
+  // const renderItem = ({ item }) => (
+  //   <Item bboards={item.name} />
+  // );
 
   return (
     <View style={styles.container}>
@@ -44,11 +45,18 @@ export default function App() {
           <Text style={styles.refreshButtonText}>REFRESH BBOARDS</Text>
         </Pressable>
         <FlatList
-          horizontal ={true}
+          horizontal={true}
           data={bboards}
           renderItem={renderItem}
           keyExtractor={item => item.name}
-        ></FlatList>
+        >
+          <TouchableOpacity
+            style={styles.BBScroller}
+            onPress={getBBoards}
+          >
+            <Text>{bboards.item.name}</Text>
+          </TouchableOpacity>
+        </FlatList>
       </View>
     </View>
 
